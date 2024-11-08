@@ -5,25 +5,25 @@ class Dude {
   private float vY;
   private float diameter;
   private float distance;
-  private boolean attraction;
-  private boolean runaway;
-  
-    public Dude(float x, float y, float vX, float vY, float distance, boolean attrction, boolean runaway) {
+  private float vectorX;
+  private float vectorY;
+
+  public Dude(float x, float y, float vX, float vY, float distance) {
     this.x = x;
     this.y =y;
     this.vX = vX;
     this.vY =vY;
     this.diameter = distance;
-    this.runaway = runaway;
-    this.attraction = attraction;
   }
 
   public void run() {
   }
-  public void update() {
-    fill (250, 152, 5);
-    strokeWeight(3);
+  public void initial(float ColorA, float ColorB, float ColorC, float strokeWeight) {
+    fill (ColorA, ColorB, ColorC);
+    strokeWeight(strokeWeight);
     circle(x, y, diameter);
+  }
+  public void bouncewall() {
     x+=vX;
     y+=vY;
     if (x>500-diameter/2) {
@@ -39,32 +39,30 @@ class Dude {
       this.vY=-vY;
     }
   }
-  public float pointX() {
-    return (x);
+
+  public float getx() {
+    return x;
   }
-  public float pointY() {
-    return (y);
+
+  public float gety() {
+    return y;
   }
-  
-  public void distance(float x1, float y1, float x2, float y2) {
-    this.distance = sqrt(pow((x1-x2), 2)+pow((y1-y2), 2));
-    println(distance);
+
+  public void distance(Dude dude) {
+    this.distance = sqrt(pow((x-dude.getx()), 2)+pow((y-dude.gety()), 2));
   }
-  public void attraction(){
-    if (distance<50){
-      if (runaway = true){
-        vX+=0.001;
-        vY+=0.001;
-      }
-      else{
-        vX-=0.001;
-        vY-=0.001;
+
+  public void vector(Dude dude) {
+    float xdistance = x-dude.getx();
+    float ydistance = y-dude.gety();
+    this.vectorX = xdistance/sqrt(pow(xdistance, 2)+pow(ydistance, 2));
+    this.vectorY = ydistance/sqrt(pow(xdistance, 2)+pow(ydistance, 2));
   }
-  
-}
-else{
-        vX+=0.001;
-        vY+=0.001;
+
+  public void attraction(float attractive) {
+    x+=vX;
+    y+=vY;
+    vX=vectorX*-attractive;
+    vY=vectorY*-attractive;
   }
-}
 }
